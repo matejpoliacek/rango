@@ -9,7 +9,7 @@ class PageAdmin(admin.ModelAdmin):
 
 # Register your models here.
 
-admin.site.register(Category)
+admin.site.register(Category, CategoryAdmin)
 admin.site.register(Page, PageAdmin)
 
 
