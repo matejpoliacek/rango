@@ -16,7 +16,7 @@ urlpatterns = [
 
     url(r'^register/$',
         views.register,
-        name='register')
+        name='register'),
 
     url(r'^login/$', views.user_login, name='login'),
 

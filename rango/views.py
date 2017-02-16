@@ -2,7 +2,8 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect, HttpResponse
 from rango.models import Category, Page
 from rango.forms import CategoryForm, PageForm, UserForm, UserProfileForm
-from django.contrib.auth import authenticate, login, login_required, logout
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from datetime import datetime
 
@@ -14,9 +15,9 @@ def get_server_side_cookie(request, cookie, default_val=None):
     return val
 
 
-def visitor_cookie_handler(request, response):
-    visits = int(request.COOKIES.get('visits', '1'))
-    last_visit_cookie = request.COOKIES.get(request,
+def visitor_cookie_handler(request):
+    visits = int(get_server_side_cookie(request, 'visits', '1'))
+    last_visit_cookie = get_server_side_cookie(request,
                                             'last_visit',
                                             str(datetime.now()))
     last_visit_time = datetime.strptime(last_visit_cookie[:-7],
@@ -27,7 +28,7 @@ def visitor_cookie_handler(request, response):
         request.session['last_visit'] = str(datetime.now())
     else:
         visits = 1
-        request.session['last_visit'] = last_visit_cookie)
+        request.session['last_visit'] = last_visit_cookie
 
     request.session['visits'] = visits
 
@@ -39,17 +40,21 @@ def index(request):
     context_dict = {'categories': category_list, 'pages': page_list}
 
     visitor_cookie_handler(request)
-    context_dist['vitits'] = request.session['visits']
+    context_dict['visits'] = request.session['visits']
 
     response = render(request, 'rango/index.html', context=context_dict)
     return response
 
         
 def about(request):
-    if request.session.test_cookie_worked()
+    if request.session.test_cookie_worked():
         print("TEST COOKIE WORKED!")
         request.session.delete_test_cookie()
     context_dict = {'aboutmessage': "This tutorial has been put together by Matej Poliacek"}
+
+    visitor_cookie_handler(request)
+    context_dict['visits'] = request.session['visits']
+    
     return render(request, 'rango/about.html', context=context_dict)
 
 
