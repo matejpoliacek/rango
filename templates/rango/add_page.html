@@ -8,6 +8,7 @@
 {% endblock %}
 
 {% block body_block %}
+	{% if user.is_authenticated %}
 		{% if cat %}			
 		<h1>Add a Page</h1>
 		
@@ -30,4 +31,7 @@
 			A category by this name does not exist.
 		</div>
 		{% endif %}
+	{% else %}
+		<strong>You must be logged in to add a page.</strong>
+	{% endif %}
 {% endblock %}

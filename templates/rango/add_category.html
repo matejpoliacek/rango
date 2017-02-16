@@ -8,6 +8,7 @@
 {% endblock %}
 
 {% block body_block %}
+	{% if user.is_authenticated %}
 		<h1>Add a Category</h1>
 		
 		<div>
@@ -24,4 +25,7 @@
 				<input type="submit" name="submit" value="Create Category" />
 			</form>
 		</div>
+	{% else %}
+		<strong>You must be logged in to add a category.</strong>
+	{% endif %}
 {% endblock %}
